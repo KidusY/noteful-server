@@ -22,6 +22,7 @@ app.get('/', (req,res)=>{
 //error handler middleware
 app.use((error, req,res, next)=>{
     let response;
+  
     if (NODE_ENV === 'production') {
         response= {error: {message: 'server error'}}
     }

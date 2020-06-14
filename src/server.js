@@ -1,10 +1,10 @@
 const app= require('./app')
-const {PORT} = require('./config');
+const {PORT,DB_CONNECTION} = require('./config');
 const knex = require('knex');
 
 const db = knex({
 	client     : 'pg',
-	connection : 'postgres://postgres:@localhost/bookmarks'
+	connection : DB_CONNECTION
 });
 
 //set a property on the app instance from the ./src/server.js file
