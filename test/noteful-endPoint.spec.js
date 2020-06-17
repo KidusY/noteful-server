@@ -14,7 +14,9 @@ describe('Noteful Endpoints', function() {
 
 		app.set('db', db);
 	});
+	
 	before('clean the table', () => db('folders').truncate());
+	
 
 	after('Disconnect from the db', () => db.destroy());
 
@@ -39,19 +41,7 @@ describe('Noteful Endpoints', function() {
 			const expectedFolder = makeTestFolders()[folderId - 1];
 			return supertest(app).get(`/noteful/folders/${folderId}`).expect(200, expectedFolder);
 		});
-		describe(`POST /noteful/folders`, () => {
-			it(`responds with 400 and an error message when the 'title' is missing`, () => {
-				return supertest(app)
-					.post('/noteful/folders')
-					.send({
-						style: 'Listicle',
-						content: 'Test new article content...'
-					})
-					.expect(400, {
-						error: { message: `Missing 'title' in request body` }
-					});
-			});
-		});
+		
 
 		describe(`GET /noteful/folders/:folder_id`, () => {
 			context('Given there are articles in the database', () => {
@@ -80,7 +70,7 @@ describe('Noteful Endpoints', function() {
 		});
 	});
 
-	describe.only(`DELETE //:folder_id`, () => {
+	describe(`DELETE //:folder_id`, () => {
 		context('Given there are folders in the database', () => {
 			testFolders = makeTestFolders();
 			beforeEach('insert folder', () => {
@@ -108,3 +98,50 @@ describe('Noteful Endpoints', function() {
 
 	});
 });
+
+
+	describe(`POST /noteful/folders`, () => {
+		let db;
+		before('Make connection to the database', () => {
+			db = knex({
+				client: 'pg',
+				connection: config.TEST_DB_CONNECTION
+			});
+
+			app.set('db', db);
+		});
+		
+		before('clean the table', () => db('folders').truncate());
+		
+
+		after('Disconnect from the db', () => db.destroy());
+
+		afterEach('clean up after each test', () => db('folders').truncate());
+
+		it.only(`create new folder`,  function() {
+				const newFolder = {
+				title: 'Test new article',
+				
+				}
+				return supertest(app)
+					.post('/noteful/folders')
+				.send(newFolder)				   
+					.expect(201)
+				.expect(res => {
+					expect(res.body.title).to.eql(newFolder.title)
+
+				})
+				})
+
+		it(`responds with 400 and an error message when the 'title' is missing`, () => {
+			return supertest(app)
+				.post('/noteful/folders')
+				.send({
+					style: 'Listicle',
+					content: 'Test new article content...'
+				})
+				.expect(400, {
+					error: { message: `Missing 'title' in request body` }
+				});
+		});
+	});

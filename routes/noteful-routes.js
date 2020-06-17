@@ -32,6 +32,7 @@ notefulRoute
 		services
 			.postFolder(req.app.get('db'), sanitizedData)
 			.then((folder) => {
+				console.log(folder);
 				logger.info(`Folder with id ${folder.id} created`);
 				res.status(201).json(folder);
 			})

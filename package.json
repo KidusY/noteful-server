@@ -1,5 +1,5 @@
 {
-  "name": "bookmarks-server",
+  "name": "Noteful-server",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,10 +8,16 @@
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
     "migrate": "postgrator --config postgrator-config.js",
-    "predeploy": "npm audit",
+    "migrate:test": "env NODE_ENV=test npm run migrate",
+    "migrate:production": "env SSL=true DATABASE_URL=$(heroku config:get DATABASE_URL) npm run migrate",
+    "start": "node src/server.js",
+    "predeploy": "npm audit && npm run migrate:production",
     "deploy": "git push heroku master"
   },
   "keywords": [],
+  "engines": {
+       "node": "12.17.0"
+     },
   "author": "",
   "license": "ISC",
   "dependencies": {

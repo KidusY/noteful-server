@@ -13,12 +13,12 @@ const services = {
 		return db.select('*').from('notes').where('id', id);
 	},
 	postFolder(db, folder) {
-		const folders = [];
-		folders.push(folder);
-
-		return db.insert(folders).into('folders').returning('*').then((rows) => {
+				
+		
+		return db.insert([folder]).into('folders').returning('*').then((rows) => {
+			console.log("rows.......",rows)
 			return rows[0];
-		});
+		}).catch(err=>console.log(err));
 	},
 	postNote(db, note) {
 		const notes = [];
