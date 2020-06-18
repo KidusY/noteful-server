@@ -7,6 +7,7 @@ const db = knex({
 	connection :  DATABASE_URL 
 });
 
+
 //set a property on the app instance from the ./src/server.js file
 app.set('db', db);
 
